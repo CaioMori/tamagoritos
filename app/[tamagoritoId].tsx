@@ -60,6 +60,18 @@ export default function Details() {
     addMedicine(tamagoritoId);
   }, []);
 
+  useEffect(() => {
+    if (!tamagorito) return;
+    if (
+      tamagorito?.life < 0 ||
+      tamagorito?.hunger < 0 ||
+      tamagorito?.sleep < 0
+    ) {
+      alert('Seu Tamagorito morreu');
+      history.back();
+    }
+  }, [tamagorito]);
+
   return (
     <>
       <HeaderComponent title={tamagorito?.name ?? ''} />
