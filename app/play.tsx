@@ -48,21 +48,11 @@ const Play = () => {
         newX = Math.max(0, Math.min(newX, screenWidth - 60));
         newY = Math.max(0, Math.min(newY, screenHeight - 60));
 
-        if (
-          newX < 0 ||
-          newX > screenWidth - 60 ||
-          newY < 0 ||
-          newY > screenHeight - 60
-        ) {
-          resetPosition();
-          return;
-        } else {
-          Animated.timing(position, {
-            toValue: { x: newX, y: newY },
-            duration: 100,
-            useNativeDriver: false,
-          }).start();
-        }
+        Animated.timing(position, {
+          toValue: { x: newX, y: newY },
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
       }),
     );
 
@@ -83,7 +73,7 @@ const Play = () => {
   }, [position]);
 
   const resetPosition = () => {
-    position.setValue({ x: 0, y: 0 });
+    position.setValue({ x: screenWidth / 2 - 20, y: screenHeight / 2 - 120 });
   };
 
   return (
