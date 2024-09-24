@@ -7,6 +7,7 @@ export interface TamagoritoInterface {
   sleep: number;
   name: string;
   image: number;
+  updatedAt: Date;
 }
 
 export interface CreateTamagoritoInterface {
@@ -19,6 +20,7 @@ export interface UpdateTamagoritoInterface {
   life?: number;
   hunger?: number;
   sleep?: number;
+  updatedAt?: Date;
 }
 
 export const createTamagorito = (request: CreateTamagoritoInterface) => {
@@ -26,7 +28,8 @@ export const createTamagorito = (request: CreateTamagoritoInterface) => {
   const life = 100;
   const hunger = 100;
   const sleep = 100;
-  const rawTamagorito = { id, life, hunger, sleep, ...request };
+  const updatedAt = new Date();
+  const rawTamagorito = { id, life, hunger, sleep, updatedAt, ...request };
   const tamagoritosToSave = JSON.stringify(rawTamagorito);
   tamagoritosStore.set(id, tamagoritosToSave);
 };
@@ -51,7 +54,14 @@ export const updateTamagorito = (request: UpdateTamagoritoInterface) => {
   const tamagorito = tamagoritosStore.getString(request.id);
   if (!tamagorito) return;
 
-  const tamagoritoToUpdate = JSON.parse(tamagorito);
+  const updatedAt = new Date();
+
+  const tamagoritoToParseWithUpatedAt = {
+    ...JSON.parse(tamagorito),
+    updatedAt,
+  };
+
+  const tamagoritoToUpdate = tamagoritoToParseWithUpatedAt;
   const updatedTamagorito = JSON.stringify({
     ...tamagoritoToUpdate,
     ...request,

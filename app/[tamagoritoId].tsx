@@ -1,10 +1,16 @@
 import HeaderComponent from '@/components/Header';
 import { getOneTamagorito, TamagoritoInterface } from '@/database/service';
+import {
+  addFood,
+  addMedicine,
+  addPlay,
+  addSleep,
+} from '@/functions/addAttribbutes';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { useCallback, useState } from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
-import { Avatar, Card, ProgressBar } from 'react-native-paper';
+import { useCallback, useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Avatar, Card, ProgressBar, Button } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,16 +25,40 @@ export default function Details() {
   const rayquaza = require('@/assets/images/rayquaza.png');
   const tamagoritoImages = [groudon, rayquaza, kyogre];
 
-  const [tamagorito, setTamagorito] = useState<TamagoritoInterface>();
-
   const { tamagoritoId } = useLocalSearchParams<{ tamagoritoId: string }>();
+
+  const [tamagorito, setTamagorito] = useState<TamagoritoInterface | undefined>(
+    getOneTamagorito(tamagoritoId),
+  );
 
   const fetchTamagorito = useCallback(() => {
     const foundTamagorito = getOneTamagorito(tamagoritoId);
     setTamagorito(foundTamagorito);
   }, []);
 
-  useFocusEffect(fetchTamagorito);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      fetchTamagorito();
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleAddFoodButton = useCallback(() => {
+    addFood(tamagoritoId);
+  }, []);
+
+  const handleAddSleepButton = useCallback(() => {
+    addSleep(tamagoritoId);
+  }, []);
+
+  const handleAddPlayButton = useCallback(() => {
+    addPlay(tamagoritoId);
+  }, []);
+
+  const handleAddMedicineButton = useCallback(() => {
+    addMedicine(tamagoritoId);
+  }, []);
 
   return (
     <>
@@ -71,7 +101,47 @@ export default function Details() {
             }
           />
         </View>
-        <View style={{ alignItems: 'center' }}></View>
+        {/* supper play button */}
+        <Link href={'/play'} asChild>
+          <Button
+            icon={() => <MaterialIcons name="games" size={24} />}
+            onPress={handleAddPlayButton}
+          >
+            Jogar
+          </Button>
+        </Link>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginBottom: 40,
+          }}
+        >
+          <Button
+            icon={() => <MaterialIcons name="fastfood" size={24} />}
+            onPress={handleAddFoodButton}
+          >
+            Comida
+          </Button>
+          <Button
+            icon={() => <MaterialIcons name="hotel" size={24} />}
+            onPress={handleAddSleepButton}
+          >
+            Dormir
+          </Button>
+          <Button
+            icon={() => <MaterialIcons name="sports" size={24} />}
+            onPress={handleAddPlayButton}
+          >
+            Brincar
+          </Button>
+          <Button
+            icon={() => <MaterialIcons name="local-hospital" size={24} />}
+            onPress={handleAddMedicineButton}
+          >
+            Remédio
+          </Button>
+        </View>
       </View>
     </>
   );

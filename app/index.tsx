@@ -50,7 +50,7 @@ export default function List() {
   const linkTo = useLinkTo();
 
   const [tamagoritos, setTamagoritos] = useState<Array<TamagoritoInterface>>(
-    [],
+    getTamagoritos(),
   );
 
   const fetchTamagoritos = useCallback(() => {
@@ -68,7 +68,13 @@ export default function List() {
     fetchTamagoritos();
   }, []);
 
-  useFocusEffect(fetchTamagoritos);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      fetchTamagoritos();
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <>
