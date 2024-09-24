@@ -47,8 +47,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      //handleUpdateTamagoritos();
-    }, 70000);
+      handleUpdateTamagoritos();
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
