@@ -63,11 +63,11 @@ export default function Details() {
   useEffect(() => {
     if (!tamagorito) return;
     if (
-      tamagorito?.life < 0 ||
-      tamagorito?.hunger < 0 ||
-      tamagorito?.sleep < 0
+      tamagorito?.life <= 0 ||
+      tamagorito?.hunger <= 0 ||
+      tamagorito?.sleep <= 0
     ) {
-      alert('Seu Tamagorito morreu');
+      alert('Seu tamagorito morreu');
       history.back();
     }
   }, [tamagorito]);
