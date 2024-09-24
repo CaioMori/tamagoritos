@@ -7,7 +7,12 @@ import {
   addSleep,
 } from '@/functions/addAttribbutes';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Link, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import {
+  Link,
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+} from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Avatar, Card, ProgressBar, Button } from 'react-native-paper';
@@ -20,6 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Details() {
+  const navigation = useNavigation();
   const groudon = require('@/assets/images/groudon.png');
   const kyogre = require('@/assets/images/kyogre.png');
   const rayquaza = require('@/assets/images/rayquaza.png');
@@ -61,14 +67,19 @@ export default function Details() {
   }, []);
 
   useEffect(() => {
-    if (!tamagorito) return;
+    console.log(`AAAA`, tamagorito);
+    if (!tamagorito) {
+      alert('Tamagorito morreu');
+      navigation.goBack();
+      return;
+    }
     if (
       tamagorito?.life <= 0 ||
       tamagorito?.hunger <= 0 ||
       tamagorito?.sleep <= 0
     ) {
       alert('Seu tamagorito morreu');
-      history.back();
+      navigation.goBack();
     }
   }, [tamagorito]);
 
